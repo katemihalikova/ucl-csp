@@ -1,0 +1,12 @@
+﻿<Application x:Class="Semestrálka.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Semestrálka"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <local:ObjectNotNullConverter x:Key="IsEmptyConverter" />
+            <local:BooleanAndConverter x:Key="BooleanAndConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

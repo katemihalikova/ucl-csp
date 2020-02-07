@@ -1,0 +1,170 @@
+﻿<Window x:Class="Semestrálka.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Semestrálka"
+        mc:Ignorable="d"
+        Title="EBC Meeting Rooms Manager" Height="600" Width="800" Closing="Window_Closing">
+    <Window.Resources>
+        <Style x:Key="BorderStyle" TargetType="Border">
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="Gray" />
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Import Data" Click="Import_Click" />
+                <MenuItem Header="E_xport Data" Click="Export_Click" />
+                <MenuItem Header="_Save" Click="Save_Click" />
+                <Separator />
+                <MenuItem Header="_Exit" Click="Exit_Click" />
+            </MenuItem>
+        </Menu>
+        <TabControl>
+            <TabItem Header="Meeting Centres And Rooms">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Text="Meeting Centres" FontWeight="Bold" FontSize="16" Grid.Column="0" Grid.Row="0" Margin="30,15,0,0"/>
+                    <ListBox x:Name="CentresListBox" ItemsSource="{Binding Path=Centres}" SelectedItem="{Binding Path=SelectedCentre}" DisplayMemberPath="Fullname" Margin="30,40,15,0" Grid.Column="0" Grid.Row="0"/>
+                    <TextBlock Text="Meeting Rooms" FontWeight="Bold" FontSize="16" Grid.Column="1" Grid.Row="0" Margin="15,15,0,0"/>
+                    <ListBox x:Name="RoomsListBox" ItemsSource="{Binding Path=SelectedCentre.MeetingRooms}" SelectedItem="{Binding Path=SelectedRoom}" DisplayMemberPath="Fullname" Margin="15,40,30,0" Grid.Column="1" Grid.Row="0"/>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="1" Margin="30,10,0,20" VerticalAlignment="Top">
+                        <Button x:Name="CentreNew" Content="New" HorizontalAlignment="Left" Width="75" Click="CentreNew_Click"/>
+                        <Button x:Name="CentreEdit" Content="Edit" HorizontalAlignment="Left" Width="75" Margin="10,0,0,0" Click="CentreEdit_Click" IsEnabled="{Binding Path=SelectedCentre, Converter={StaticResource IsEmptyConverter}}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Margin="0,10,15,20" VerticalAlignment="Top">
+                        <Button x:Name="CentreDelete" Content="Delete" HorizontalAlignment="Left" Width="75" Click="CentreDelete_Click" IsEnabled="{Binding Path=SelectedCentre, Converter={StaticResource IsEmptyConverter}}"/>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="1" Margin="15,10,0,20" Grid.Column="1" VerticalAlignment="Top">
+                        <Button x:Name="RoomNew" Content="New" HorizontalAlignment="Left" Width="75" Click="RoomNew_Click" IsEnabled="{Binding Path=SelectedCentre, Converter={StaticResource IsEmptyConverter}}"/>
+                        <Button x:Name="RoomEdit" Content="Edit" HorizontalAlignment="Left" Width="75" Margin="10,0,0,0" Click="RoomEdit_Click" IsEnabled="{Binding Path=SelectedRoom, Converter={StaticResource IsEmptyConverter}}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Margin="0,10,30,20" Grid.Column="1" VerticalAlignment="Top">
+                        <Button x:Name="RoomDelete" Content="Delete" HorizontalAlignment="Left" Width="75" Click="RoomDelete_Click" IsEnabled="{Binding Path=SelectedRoom, Converter={StaticResource IsEmptyConverter}}"/>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Vertical" Grid.Row="2" Margin="30,10,15,20" VerticalAlignment="Top">
+                        <TextBlock Text="Meeting Centre Details" FontWeight="Bold" FontSize="16"/>
+                        <TextBlock Text="Name"/>
+                        <Border Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="{Binding Path=SelectedCentre.Name}"/>
+                        </Border>
+                        <TextBlock Text="Code"/>
+                        <Border Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="{Binding Path=SelectedCentre.Code}"/>
+                        </Border>
+                        <TextBlock Text="Description"/>
+                        <Border Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="{Binding Path=SelectedCentre.Description}"/>
+                        </Border>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Vertical" Grid.Row="2" Margin="15,10,30,20" VerticalAlignment="Top" Grid.Column="1">
+                        <TextBlock Text="Meeting Room Details" FontWeight="Bold" FontSize="16"/>
+                        <TextBlock Text="Name"/>
+                        <Border Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="{Binding Path=SelectedRoom.Name}"/>
+                        </Border>
+                        <TextBlock Text="Code"/>
+                        <Border Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="{Binding Path=SelectedRoom.Code}"/>
+                        </Border>
+                        <TextBlock Text="Description"/>
+                        <Border Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="{Binding Path=SelectedRoom.Description}"/>
+                        </Border>
+                        <TextBlock Text="Capacity"/>
+                        <Border Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="{Binding Path=SelectedRoom.Capacity}"/>
+                        </Border>
+                        <TextBlock Text="Video conference"/>
+                        <Border Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="{Binding Path=SelectedRoom.VideoConference}"/>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Meeting Planning">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="Export" Content="Export" Width="75" Click="Export_Click" Grid.Column="1" VerticalAlignment="Top" Margin="10,30,30,30"/>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="30" VerticalAlignment="Top">
+                            <TextBlock Text="Meetings Planning" FontWeight="Bold" FontSize="20"/>
+                            <Label Content="Meeting _Centre:" Target="{Binding ElementName=CentresComboBox}"/>
+                            <ComboBox x:Name="CentresComboBox" ItemsSource="{Binding Path=Centres}" SelectedItem="{Binding Path=SelectedCentre}" DisplayMemberPath="Fullname"/>
+                            <Label Content="Meeting _Room:" Target="{Binding ElementName=RoomsComboBox}"/>
+                            <ComboBox x:Name="RoomsComboBox" ItemsSource="{Binding Path=SelectedCentre.MeetingRooms}" SelectedItem="{Binding Path=SelectedRoom}" DisplayMemberPath="Fullname" SelectionChanged="RoomsComboBox_SelectionChanged"/>
+                            <Label Content="_Date:" Target="{Binding ElementName=DatePicker}"/>
+                            <DatePicker x:Name="DatePicker" SelectedDate="{Binding Path=SelectedDate}" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                            <TextBlock Text="Meetings:"/>
+                            <ListBox x:Name="ReservationsListBox" ItemsSource="{Binding Path=ListOfReservations}" SelectedItem="{Binding Path=SelectedReservation}" DisplayMemberPath="Fullname" Height="200"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Button x:Name="ReservationNew" Content="New" HorizontalAlignment="Left" Width="75" Click="ReservationNew_Click">
+                                        <Button.IsEnabled>
+                                            <MultiBinding Converter="{StaticResource BooleanAndConverter}">
+                                                <Binding Path="SelectedRoom" Converter="{StaticResource IsEmptyConverter}"/>
+                                                <Binding Path="SelectedDate" Converter="{StaticResource IsEmptyConverter}"/>
+                                            </MultiBinding>
+                                        </Button.IsEnabled>
+                                    </Button>
+                                    <Button x:Name="ReservationEdit" Content="Edit" HorizontalAlignment="Left" Width="75" Margin="10,0,0,0" Click="ReservationEdit_Click" IsEnabled="{Binding Path=SelectedReservation, Converter={StaticResource IsEmptyConverter}}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button x:Name="ReservationDelete" Content="Delete" HorizontalAlignment="Left" Width="75" Click="ReservationDelete_Click" IsEnabled="{Binding Path=SelectedReservation, Converter={StaticResource IsEmptyConverter}}"/>
+                                </StackPanel>
+                            </Grid>
+                            <TextBlock Text="Meeting Details" FontWeight="Bold" FontSize="16" Margin="0,15,0,0"/>
+                            <TextBlock Text="From - To"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Border Style="{StaticResource BorderStyle}">
+                                    <TextBlock Text="{Binding Path=SelectedReservation.TimeFrom}" Width="35"/>
+                                </Border>
+                                <TextBlock Text="  -  "/>
+                                <Border Style="{StaticResource BorderStyle}">
+                                    <TextBlock Text="{Binding Path=SelectedReservation.TimeTo}" Width="35"/>
+                                </Border>
+                            </StackPanel>
+                            <TextBlock Text="Expected persons count"/>
+                            <Border Style="{StaticResource BorderStyle}">
+                                <TextBlock Text="{Binding Path=SelectedReservation.ExpectedPersonsCount}"/>
+                            </Border>
+                            <TextBlock Text="Customer"/>
+                            <Border Style="{StaticResource BorderStyle}">
+                                <TextBlock Text="{Binding Path=SelectedReservation.Customer}"/>
+                            </Border>
+                            <TextBlock Text="Video conference"/>
+                            <Border Style="{StaticResource BorderStyle}">
+                                <TextBlock Text="{Binding Path=SelectedReservation.VideoConference}"/>
+                            </Border>
+                            <TextBlock Text="Note"/>
+                            <Border Style="{StaticResource BorderStyle}">
+                                <TextBlock Text="{Binding Path=SelectedReservation.Note}" TextWrapping="Wrap" Height="100"/>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>
